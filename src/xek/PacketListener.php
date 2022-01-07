@@ -7,7 +7,7 @@ use pocketmine\Server;
 use pocketmine\event\Listener;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\server\DataPacketReceiveEvent;
-use pocketmine\mcpe\protocl\AnimatePacket;
+use pocketmine\mcpe\protocol\AnimatePacket;
 use xek\Main;
 
 class PacketListener implements Listener {
