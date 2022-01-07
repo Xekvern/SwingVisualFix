@@ -6,6 +6,8 @@ use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\event\Listener;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\server\DataPacketReceiveEvent;
+use pocketmine\mcpe\protocl\AnimatePacket;
 use xek\Main;
 
 class PacketListener implements Listener {
@@ -14,11 +16,12 @@ class PacketListener implements Listener {
 		$plugin->getServer()->getPluginManager()->registerEvents($this, $plugin);
 	}
 
-	public function customKnockback(EntityDamageByEntityEvent $event) {
-		$player=$event->getEntity();
-		if($player instanceof Player) {
-			$event->setKnockBack(Main::getInstance()->getConfig()->get("KB"));
-            $event->setAttackCooldown(9);
+	public function onRecieve(DataPacketReceiveEvent $event) {
+		$packet = $event->getPacket();
+		if($packet instanceof AnimatePacket && $packet->action === AnimatePacket::ACTION_SWING_ARM) {
+			$event->cancel();
+			$player = $event->getOrigin()->getPlayer();
+			$player->getServer()->broadcastPackets($player->getViewers(), [$packet]);
 		}
 	}
 }
